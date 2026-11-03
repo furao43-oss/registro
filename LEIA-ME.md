@@ -4,14 +4,15 @@ Esta versão transforma a interface recebida em um Progressive Web App (PWA), in
 
 ## O que foi preservado
 
-- Controle semanal com nove perguntas e observações.
-- Registros rápidos.
+- Controle semanal com nove perguntas principais, observações e uma pergunta opcional sobre perceber o impulso de esconder, distorcer ou omitir.
+- Registros rápidos com análise guiada: situação, verdade completa, tentativa de fuga, emoções, pensamento automático, o que tentava proteger, ganho imediato, custo posterior, hipótese de causa, cinco porquês e reparação.
+- Relatório semanal com padrões de fuga, emoções e fatores que a pessoa tentou proteger.
 - Histórico, exclusão local e backup JSON com imagens.
 - Armazenamento local IndexedDB em cada dispositivo.
 - Sincronização de respostas, observações e registros rápidos com a aba `Registros`.
 - Mesma estrutura da planilha antiga: `key`, `type`, `date`, `updatedAt`, `payload`.
 - Fotos continuam locais e também entram nos backups exportados; não são enviadas à planilha.
-- O relatório automático por e-mail continua no Apps Script, usando o arquivo separado `EmailSemanal-atualizado.gs`. Não publique esse arquivo no GitHub: ele contém os destinatários do relatório.
+- O relatório automático por e-mail continua no Apps Script, usando o arquivo separado `EmailSemanal-causa-raiz.gs`. Não publique esse arquivo no GitHub: ele contém os destinatários do relatório.
 
 ## Antes de migrar: proteja os registros locais
 
