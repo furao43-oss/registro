@@ -1,4 +1,4 @@
-const CACHE_NAME = 'registro-verdade-pwa-v2-causa-raiz';
+const CACHE_NAME = 'registro-verdade-pwa-v3-controle-semanal';
 const APP_SHELL = [
   './',
   './index.html',
