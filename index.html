@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<base target="_top">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#202124">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<title>Registro de Verdade</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--ink:#202124;--muted:#686d75;--line:#e2e5e9;--dark:#202124;--soft:#eff1f4;--green:#176b43;--amber:#8d5500;--blue:#244a75}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}main{max-width:940px;margin:0 auto;padding:20px 13px 50px}
+h1{font-size:clamp(26px,5vw,34px);margin:0 0 5px}h2{font-size:20px;margin:0 0 13px}h3{font-size:17px;margin:0 0 8px}p{line-height:1.45}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 3px 12px #00000005}.hero{padding:22px}.hero p{margin:4px 0 0}
+.nav{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0}.nav button{flex:1;min-width:140px}.nav button.active{background:var(--dark);color:#fff}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 14px;cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #9bbcff;outline-offset:2px}.primary{background:var(--dark);color:#fff}.secondary{background:var(--soft);color:var(--ink)}.danger{background:#fff0f0;color:#a12828}.full{width:100%;margin-top:14px}
+label{display:block;font-weight:650;margin:14px 0 7px}textarea,input[type=text],input[type=email],input[type=date],input[type=password],input[type=file]{width:100%;font:inherit}textarea{min-height:105px;resize:vertical;padding:12px;border:1px solid #cbd0d7;border-radius:10px;background:white}input[type=text],input[type=email],input[type=date],input[type=password]{padding:11px;border:1px solid #cbd0d7;border-radius:10px}input[type=file]{padding:10px;border:1px dashed #b9bec7;border-radius:10px;background:#fafafa}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{flex:1;min-width:140px}.hidden{display:none!important}.tabpanel{display:none}.tabpanel.active{display:block}
+.notice{padding:12px;border-radius:10px;background:#f0f6ff;color:var(--blue);font-size:13px;margin:12px 0}.warn{background:#fff6e8;color:#77500e}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:140px}.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.count{font-size:13px;color:var(--muted)}
+.preview,.entry-images{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.preview img{width:80px;height:80px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}.entry-images img{width:min(100%,180px);max-height:220px;object-fit:contain;border:1px solid var(--line);border-radius:9px;background:#fafafa;cursor:pointer}
+.checklist{display:grid;gap:9px;margin:12px 0 16px}.question{border:1px solid var(--line);border-radius:12px;padding:12px}.question p{font-weight:650;margin:0 0 9px;line-height:1.35}.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;background:#f3f4f6;cursor:pointer;font-weight:500;margin:0}.choice input{width:17px;height:17px;margin:0}
+.weekdays{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;margin:15px 0}.daybtn{padding:9px 3px;background:#f2f3f5;border:1px solid transparent;text-align:center;min-width:0}.daybtn span{display:block;font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}.daybtn.selected{border-color:#222;background:#222;color:white}.daybtn.selected span{color:#eee}.daybtn.done{background:#eaf5ef}.daybtn.selected.done{background:#222}.daybtn.missing{border-color:#d8dce1}
+.progress{height:7px;background:#eceef1;border-radius:99px;overflow:hidden;margin:10px 0}.progress>div{height:100%;background:#32363d;width:0%}.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.stat{border:1px solid var(--line);padding:12px;border-radius:12px}.stat strong{font-size:23px;display:block}.stat span{font-size:12px;color:var(--muted)}.report{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#f7f8fa;border:1px solid var(--line);border-radius:10px;padding:13px;max-height:540px;overflow:auto}
+.entry{border-top:1px solid var(--line);padding:16px 0}.entry:first-child{border-top:0;padding-top:0}.entry-date{font-size:12px;color:var(--muted);margin-bottom:7px}.entry-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}.empty{color:var(--muted);padding:10px 0}#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 16px;border-radius:10px;max-width:calc(100% - 28px);box-shadow:0 3px 16px #0003;display:none;z-index:20}
+@media(min-width:680px){main{padding-top:30px}.card{padding:22px}.hero{padding:26px}.statgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:440px){.weekdays{gap:4px}.daybtn{font-size:12px;padding:8px 1px}.daybtn span{font-size:10px}.nav button{min-width:100%}}
+</style>
+</head>
+<body>
+<main>
+  <section class="card hero">
+    <h1>Registro de Verdade</h1>
+    <p class="muted">Registro diário, histórico e relatório semanal. Instale na tela inicial do celular e sincronize com sua planilha privada do Google.</p>
+  </section>
+
+  <nav class="nav" aria-label="Menu principal">
+    <button class="active" data-tab="quick" type="button">Registro rápido</button>
+    <button data-tab="weekly" type="button">Controle semanal</button>
+    <button data-tab="history" type="button">Histórico e backup</button>
+    <button data-tab="automation" type="button">Conta Google e nuvem</button>
+  </nav>
+
+  <section id="tab-quick" class="tabpanel active">
+    <div class="card">
+      <h2>Novo registro rápido</h2>
+      <p class="muted">Para registrar uma mentira percebida, um fato importante ou uma correção que precisa fazer. Escreva o mínimo necessário e anexe uma imagem se ajudar.</p>
+      <form id="quickForm">
+        <label for="quickText">O que aconteceu?</label>
+        <textarea id="quickText" placeholder="Ex.: Percebi que dei uma resposta falsa para evitar uma conversa. A verdade é…" ></textarea>
+        <label for="quickPhotos">Adicionar imagem (opcional)</label>
+        <input id="quickPhotos" type="file" accept="image/*" multiple>
+        <div id="quickPreview" class="preview"></div>
+        <button class="primary full" type="submit">Salvar registro</button>
+      </form>
+      <p class="small">O registro é salvo neste aparelho. Ao conectar sua conta Google, os textos e respostas também são sincronizados com a planilha selecionada.</p>
+    </div>
+  </section>
+
+  <section id="tab-weekly" class="tabpanel">
+    <div class="card">
+      <div class="topline">
+        <div><h2 style="margin-bottom:3px">Controle semanal</h2><div id="weekLabel" class="muted"></div></div>
+        <div class="actions" style="margin-top:0"><button id="prevWeek" class="secondary" type="button">← Semana anterior</button><button id="thisWeek" class="secondary" type="button">Semana atual</button><button id="nextWeek" class="secondary" type="button">Próxima →</button></div>
+      </div>
+      <div class="progress"><div id="weekProgress"></div></div>
+      <div id="weekProgressText" class="small">0 de 7 dias preenchidos</div>
+      <div id="weekDays" class="weekdays" aria-label="Selecione um dia da semana"></div>
+      <hr>
+      <div class="topline"><h3 id="selectedDayTitle">Registro de segunda-feira</h3><span id="selectedDayStatus" class="count"></span></div>
+      <p class="muted">Marque Sim ou Não em cada pergunta. Se não aconteceu nada em alguma categoria, marque Não. Se houver algo a explicar, use as observações.</p>
+      <form id="dailyForm">
+        <div class="checklist">
+          <div class="question"><p>1. Hoje, menti (falei algo que sabia ser falso)?</p><div class="choices"><label class="choice"><input type="radio" name="q_lied" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_lied" value="não" required> Não</label></div></div>
+          <div class="question"><p>2. Escondi ou omiti algo importante para evitar uma consequência?</p><div class="choices"><label class="choice"><input type="radio" name="q_hid" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_hid" value="não" required> Não</label></div></div>
+          <div class="question"><p>3. Dei uma desculpa falsa ou mudei a versão para escapar de uma consequência?</p><div class="choices"><label class="choice"><input type="radio" name="q_falseVersion" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_falseVersion" value="não" required> Não</label></div></div>
+          <div class="question"><p>4. Descumpri algum limite ou compromisso que assumi?</p><div class="choices"><label class="choice"><input type="radio" name="q_brokenCommitment" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_brokenCommitment" value="não" required> Não</label></div></div>
+          <div class="question"><p>5. Quando senti vontade de esconder algo, fiz uma pausa antes de agir?</p><div class="choices"><label class="choice"><input type="radio" name="q_paused" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_paused" value="não" required> Não</label></div></div>
+          <div class="question"><p>6. Há alguma informação que preciso corrigir ou esclarecer com alguém?</p><div class="choices"><label class="choice"><input type="radio" name="q_needCorrection" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_needCorrection" value="não" required> Não</label></div></div>
+          <div class="question"><p>7. Se havia algo a corrigir, já corrigi?</p><div class="choices"><label class="choice"><input type="radio" name="q_corrected" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_corrected" value="não" required> Não</label></div></div>
+          <div class="question"><p>8. Contei ou corrigi espontaneamente, antes de ser descoberto?</p><div class="choices"><label class="choice"><input type="radio" name="q_proactive" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_proactive" value="não" required> Não</label></div></div>
+          <div class="question"><p>9. Procurei apoio quando senti que poderia repetir o padrão?</p><div class="choices"><label class="choice"><input type="radio" name="q_soughtSupport" value="sim" required> Sim</label><label class="choice"><input type="radio" name="q_soughtSupport" value="não" required> Não</label></div></div>
+        </div>
+        <label for="dailyNote">Observações do dia (opcional)</label>
+        <textarea id="dailyNote" placeholder="Contexto, o que precisa corrigir ou próximo passo. Pode deixar em branco."></textarea>
+        <label for="dailyPhotos">Imagem do dia (opcional)</label>
+        <input id="dailyPhotos" type="file" accept="image/*" multiple>
+        <div id="dailyPreview" class="preview"></div>
+        <button class="primary full" id="saveDailyBtn" type="submit">Salvar este dia</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Relatório da semana</h2>
+      <p class="muted">O relatório é montado com os registros de segunda a domingo da semana selecionada. Você pode baixar em TXT ou preparar um e-mail com o texto preenchido.</p>
+      <label for="reportEmail">Seu e-mail para envio</label>
+      <input id="reportEmail" type="email" placeholder="voce@exemplo.com">
+      <div class="actions">
+        <button class="secondary" id="downloadReport" type="button">Baixar relatório TXT</button>
+        <button class="primary" id="emailReport" type="button">Preparar e-mail semanal</button>
+      </div>
+      <div class="notice">O botão “Preparar e-mail semanal” continua disponível para envio manual. O relatório automático de segunda-feira continua sendo enviado pelo acionador do Apps Script, lendo a mesma planilha sincronizada.</div>
+      <h3 style="margin-top:18px">Prévia do relatório</h3>
+      <div id="reportPreview" class="report">O relatório será montado aqui.</div>
+    </div>
+  </section>
+
+  <section id="tab-history" class="tabpanel">
+    <div class="card">
+      <h2>Histórico completo</h2>
+      <div class="actions">
+        <button class="secondary" id="exportBtn" type="button">Exportar backup</button>
+        <button class="secondary" id="importBtn" type="button">Importar backup</button>
+        <input id="backupFile" class="hidden" type="file" accept="application/json,.json">
+      </div>
+      <p class="small">O backup inclui registros rápidos, prestações de contas dos dias e anexos de imagem. Importe um backup para recuperar registros em outra cópia do programa.</p>
+      <div id="history" style="margin-top:18px"><p class="empty">Carregando registros…</p></div>
+    </div>
+    <div class="card">
+      <strong>Privacidade e armazenamento</strong>
+      <p class="small">Os registros ficam primeiro no armazenamento local deste aparelho. Quando você conecta sua conta Google, o aplicativo sincroniza respostas, observações e registros escritos com a planilha que você escolher. As imagens anexadas permanecem somente no aparelho e nos backups exportados. O acesso à planilha é autorizado pelo Google e limitado ao arquivo escolhido pelo seletor do Drive.</p>
+    </div>
+  </section>
+
+  <section id="tab-automation" class="tabpanel">
+    <div class="card">
+      <h2>Sincronização segura com Google Sheets</h2>
+      <p class="muted">Conecte a conta Google que tem acesso à planilha criada pelo Registro de Verdade. Depois, selecione a planilha “Registro de Verdade - Dados Privados”. O aplicativo usa a autorização do Google e o acesso fica limitado ao arquivo escolhido.</p>
+      <label for="googleClientId">OAuth Client ID</label>
+      <input id="googleClientId" type="text" autocomplete="off" placeholder="...apps.googleusercontent.com">
+      <label for="googleApiKey">Chave de API do Google</label>
+      <input id="googleApiKey" type="text" autocomplete="off" placeholder="AIza...">
+      <label for="googleProjectNumber">Número do projeto Google Cloud</label>
+      <input id="googleProjectNumber" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex.: 123456789012">
+      <div class="actions">
+        <button id="saveGoogleConfigBtn" class="secondary" type="button">Salvar configuração</button>
+        <button id="connectGoogleBtn" class="primary" type="button" disabled>Conectar conta Google</button>
+      </div>
+      <div class="actions">
+        <button id="chooseSpreadsheetBtn" class="secondary" type="button" disabled>Escolher planilha</button>
+        <button id="syncAllBtn" class="primary" type="button" disabled>Sincronizar agora</button>
+        <button id="loadCloudBtn" class="secondary" type="button" disabled>Baixar dados da nuvem</button>
+        <button id="disconnectGoogleBtn" class="danger" type="button" disabled>Desconectar</button>
+      </div>
+      <p id="selectedSpreadsheetLabel" class="small">Nenhuma planilha selecionada neste aparelho.</p>
+      <p id="cloudStatus" class="notice">Configure a integração e conecte sua conta Google para sincronizar.</p>
+      <p class="small">Os textos, respostas e observações são sincronizados. Fotos anexadas continuam apenas no aparelho e nos backups exportados. A autorização usa o escopo <code>drive.file</code>, recomendado pelo Google para limitar o acesso aos arquivos usados pelo aplicativo.</p>
+    </div>
+    <div class="card">
+      <h2>Configuração inicial (uma vez)</h2>
+      <ol>
+        <li>No Google Cloud Console, crie um projeto e habilite as APIs <b>Google Sheets API</b> e <b>Google Picker API</b>.</li>
+        <li>Configure a tela de consentimento OAuth. Durante os testes, adicione sua própria conta Google como usuário de teste.</li>
+        <li>Crie um ID do cliente OAuth do tipo <b>Aplicativo da Web</b>. Em “Origens JavaScript autorizadas”, informe a origem do GitHub Pages, por exemplo <code>https://SEU-USUARIO.github.io</code> (sem o caminho do repositório).</li>
+        <li>Crie uma chave de API para o Google Picker. Restrinja-a à API Google Picker e ao endereço do seu site (incluindo o caminho do repositório, se aplicável).</li>
+        <li>Copie o ID do cliente, a chave de API e o número do projeto para os campos acima e clique em “Salvar configuração”.</li>
+        <li>Clique em “Conectar conta Google” e depois em “Escolher planilha”. Selecione a planilha existente <b>Registro de Verdade - Dados Privados</b>, com a aba <b>Registros</b>. Não crie uma planilha nova.</li>
+        <li>Repita a conexão e a seleção da mesma planilha em cada aparelho. Depois disso, use “Sincronizar agora” sempre que quiser forçar uma sincronização.</li>
+      </ol>
+      <div class="notice warn">Migração: o armazenamento local do aplicativo antigo não é copiado automaticamente para este novo endereço. Antes de abandonar a versão antiga, exporte um backup em “Histórico e backup”. Depois, importe o arquivo nesta versão e sincronize. Os dados que já estão na planilha serão baixados quando você conectar.</div>
+      <p class="small">O código do aplicativo não contém chave privada nem senha. O ID OAuth e a chave de API identificam o projeto; o acesso aos dados depende da autorização concedida pela sua conta Google.</p>
+    </div>
+  </section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  'use strict';
+  const DB_NAME='RegistroDeVerdadeDB', DB_VERSION=2, STORE='records', WEEKLY='weekly';
+  const questions=[
+    ['lied','Hoje, menti (falei algo que sabia ser falso)?'],
+    ['hid','Escondi ou omiti algo importante para evitar uma consequência?'],
+    ['falseVersion','Dei uma desculpa falsa ou mudei a versão para escapar de uma consequência?'],
+    ['brokenCommitment','Descumpri algum limite ou compromisso que assumi?'],
+    ['paused','Quando senti vontade de esconder algo, fiz uma pausa antes de agir?'],
+    ['needCorrection','Há alguma informação que preciso corrigir ou esclarecer com alguém?'],
+    ['corrected','Se havia algo a corrigir, já corrigi?'],
+    ['proactive','Contei ou corrigi espontaneamente, antes de ser descoberto?'],
+    ['soughtSupport','Procurei apoio quando senti que poderia repetir o padrão?']
+  ];
+  let db, quickFiles=[], dailyFiles=[], quickUrls=[], dailyUrls=[], weekOffset=0, selectedDate;
+  const $=id=>document.getElementById(id);
+  const toast=$('toast');
+  const dateFmt=new Intl.DateTimeFormat('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const dateLong=new Intl.DateTimeFormat('pt-BR',{weekday:'long',day:'2-digit',month:'long',year:'numeric'});
+
+  // Preferências são opcionais: se o navegador bloquear localStorage em arquivo local,
+  // a falha não deve interromper a instalação dos eventos nem impedir o uso do controle.
+  function prefGet(key){try{return window.localStorage.getItem(key)||'';}catch(err){console.warn('Preferência indisponível:',key,err);return '';}}
+  function prefSet(key,value){try{window.localStorage.setItem(key,String(value));return true;}catch(err){console.warn('Não foi possível salvar a preferência:',key,err);return false;}}
+  function prefRemove(key){try{window.localStorage.removeItem(key);}catch(err){console.warn('Não foi possível remover a preferência:',key,err);}}
+
+  function notify(msg){toast.textContent=msg;toast.style.display='block';clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.style.display='none',3200)}
+  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+  function localISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+  function dateFromISO(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0,0)}
+  function mondayOf(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate(),12);const wd=(x.getDay()+6)%7;x.setDate(x.getDate()-wd);return x}
+  function selectedWeekDates(){const monday=mondayOf(new Date());monday.setDate(monday.getDate()+weekOffset*7);return Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(monday.getDate()+i);return localISO(d)})}
+  function displayDate(s){return dateFmt.format(dateFromISO(s))}
+  function displayLong(s){const v=dateLong.format(dateFromISO(s));return v.charAt(0).toUpperCase()+v.slice(1)}
+  function store(name,mode='readonly'){return db.transaction(name,mode).objectStore(name)}
+  function reqPromise(req){return new Promise((resolve,reject)=>{req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+  function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,DB_VERSION);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(STORE)){const st=d.createObjectStore(STORE,{keyPath:'id',autoIncrement:true});st.createIndex('createdAt','createdAt',{unique:false})}if(!d.objectStoreNames.contains(WEEKLY)){d.createObjectStore(WEEKLY,{keyPath:'date'})}};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);req.onblocked=()=>reject(new Error('Feche outras abas do Registro de Verdade e tente de novo.'))})}
+  async function allQuick(){return (await reqPromise(store(STORE).getAll())).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))}
+  async function allWeekly(){return reqPromise(store(WEEKLY).getAll())}
+  async function getDaily(date){return reqPromise(store(WEEKLY).get(date))}
+  async function saveQuick(obj){return reqPromise(store(STORE,'readwrite').add(obj))}
+  async function saveDaily(obj){return reqPromise(store(WEEKLY,'readwrite').put(obj))}
+
+  const GOOGLE_CONFIG_KEY='registro_verdade_google_config_v1';
+  const SHEET_ID_KEY='registro_verdade_sheet_id_v1';
+  const SHEET_TITLE_KEY='registro_verdade_sheet_title_v1';
+  const SHEET_NAME='Registros';
+  const SHEETS_SCOPE='https://www.googleapis.com/auth/drive.file';
+  let googleAccessToken='', googleAccessTokenExpiresAt=0;
+  let selectedSpreadsheetId=prefGet(SHEET_ID_KEY);
+  let selectedSpreadsheetTitle=prefGet(SHEET_TITLE_KEY);
+  function readGoogleConfig(){try{return JSON.parse(prefGet(GOOGLE_CONFIG_KEY)||'{}')}catch(_){return {}}}
+  function loadGoogleConfigFields(){const c=readGoogleConfig();$('googleClientId').value=c.clientId||'';$('googleApiKey').value=c.apiKey||'';$('googleProjectNumber').value=c.projectNumber||'';}
+  function saveGoogleConfig(show=true){
+    const config={clientId:$('googleClientId').value.trim(),apiKey:$('googleApiKey').value.trim(),projectNumber:$('googleProjectNumber').value.trim()};
+    if(!config.clientId||!config.apiKey||!config.projectNumber)throw new Error('Preencha o OAuth Client ID, a chave de API e o número do projeto Google Cloud.');
+    if(!/^[0-9]+$/.test(config.projectNumber))throw new Error('O número do projeto Google Cloud deve conter somente números.');
+    if(!prefSet(GOOGLE_CONFIG_KEY,JSON.stringify(config)))throw new Error('O navegador não permitiu salvar a configuração neste aparelho.');
+    if(show)notify('Configuração Google salva neste aparelho.');
+    return config;
+  }
+  function googleConnected(){return !!(googleAccessToken&&googleAccessTokenExpiresAt>Date.now()+30000)}
+  function cloudConfigured(){return !!(googleConnected()&&selectedSpreadsheetId)}
+  function updateCloudStatus(message, warning=false){const el=$('cloudStatus');if(!el)return;el.textContent=message;el.classList.toggle('warn',!!warning)}
+  function updateGoogleControls(){
+    const connected=googleConnected();
+    $('chooseSpreadsheetBtn').disabled=!connected;
+    $('syncAllBtn').disabled=!(connected&&selectedSpreadsheetId);
+    $('loadCloudBtn').disabled=!(connected&&selectedSpreadsheetId);
+    $('disconnectGoogleBtn').disabled=!connected;
+    $('selectedSpreadsheetLabel').textContent=selectedSpreadsheetId?`Planilha selecionada: ${selectedSpreadsheetTitle||'Registro de Verdade - Dados Privados'} (${selectedSpreadsheetId})`:'Nenhuma planilha selecionada neste aparelho.';
+  }
+  function makeCloudId(){return 'q_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12)}
+  function loadExternalScript(src){return new Promise((resolve,reject)=>{const existing=[...document.scripts].find(s=>s.src===src);if(existing){if(existing.dataset.loaded==='yes'){resolve();return}existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',()=>reject(new Error('Não foi possível carregar a biblioteca Google: '+src)),{once:true});return}const script=document.createElement('script');script.src=src;script.async=true;script.onload=()=>{script.dataset.loaded='yes';resolve()};script.onerror=()=>reject(new Error('Não foi possível carregar a biblioteca Google: '+src));document.head.appendChild(script)})}
+  const googleLibrariesReady=Promise.all([loadExternalScript('https://accounts.google.com/gsi/client'),loadExternalScript('https://apis.google.com/js/api.js')]).then(()=>new Promise((resolve,reject)=>{if(!window.gapi){reject(new Error('Biblioteca Google API indisponível.'));return}window.gapi.load('picker',{callback:resolve,onerror:()=>reject(new Error('Não foi possível carregar o seletor do Google Drive.')),timeout:15000,ontimeout:()=>reject(new Error('Tempo esgotado ao carregar o seletor do Google Drive.'))})}));
+  googleLibrariesReady.then(()=>{$('connectGoogleBtn').disabled=false;updateCloudStatus('Bibliotecas Google carregadas. Salve a configuração e conecte sua conta.');}).catch(err=>{console.error(err);updateCloudStatus(err.message,true)});
+  function requestGoogleAccess(config){return new Promise((resolve,reject)=>{
+    if(!window.google?.accounts?.oauth2){reject(new Error('A biblioteca de autenticação Google ainda não está pronta.'));return}
+    const client=google.accounts.oauth2.initTokenClient({client_id:config.clientId,scope:SHEETS_SCOPE,include_granted_scopes:true,callback:response=>{if(response.error){reject(new Error(response.error_description||response.error));return}googleAccessToken=response.access_token||'';googleAccessTokenExpiresAt=Date.now()+(Number(response.expires_in)||3600)*1000;updateGoogleControls();resolve(response)},error_callback:error=>reject(new Error(error?.type||'Não foi possível abrir a janela de autorização Google.'))});
+    client.requestAccessToken({prompt:''});
+  })}
+  function openSpreadsheetPicker(){
+    if(!googleConnected()){notify('Conecte sua conta Google antes de escolher a planilha.');return}
+    const config=readGoogleConfig();
+    const view=new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS).setMimeTypes('application/vnd.google-apps.spreadsheet').setSelectFolderEnabled(false);
+    const picker=new google.picker.PickerBuilder().setAppId(config.projectNumber).setDeveloperKey(config.apiKey).setOAuthToken(googleAccessToken).setOrigin(window.location.origin).addView(view).setCallback(async data=>{
+      if(data.action!==google.picker.Action.PICKED)return;
+      const doc=(data.docs||[])[0];if(!doc?.id)return;
+      const oldId=selectedSpreadsheetId,oldTitle=selectedSpreadsheetTitle;
+      selectedSpreadsheetId=doc.id;selectedSpreadsheetTitle=doc.name||doc.title||'Planilha selecionada';
+      try{
+        await verifySelectedSpreadsheet();
+        prefSet(SHEET_ID_KEY,selectedSpreadsheetId);prefSet(SHEET_TITLE_KEY,selectedSpreadsheetTitle);updateGoogleControls();
+        updateCloudStatus('Planilha validada. Baixando registros existentes…');
+        const pulled=await pullCloudToLocal(true);const synced=await syncAllLocalAndCloud(true);
+        if(!pulled||!synced)throw new Error('A planilha foi selecionada, mas a sincronização não foi concluída. Confira o status e a autorização Google.');
+        notify('Planilha conectada e sincronizada.');
+      }catch(err){selectedSpreadsheetId=oldId;selectedSpreadsheetTitle=oldTitle;updateGoogleControls();updateCloudStatus('Não consegui usar essa planilha: '+err.message,true);notify('Selecione a planilha original do Registro de Verdade.');}
+    }).build();
+    picker.setVisible(true);
+  }
+  async function sheetsApi(path,options={}){
+    if(!googleAccessToken||googleAccessTokenExpiresAt<=Date.now()+15000)throw new Error('A sessão Google expirou. Clique em “Conectar conta Google” novamente.');
+    if(!selectedSpreadsheetId)throw new Error('Escolha a planilha do Registro de Verdade.');
+    const url='https://sheets.googleapis.com/v4/spreadsheets/'+encodeURIComponent(selectedSpreadsheetId)+'/'+path;
+    const headers={Authorization:'Bearer '+googleAccessToken,...(options.body?{'Content-Type':'application/json'}:{})};
+    const response=await fetch(url,{...options,headers});
+    const raw=await response.text();let result={};try{result=raw?JSON.parse(raw):{}}catch(_){result={}}
+    if(!response.ok){if(response.status===401){googleAccessToken='';googleAccessTokenExpiresAt=0;updateGoogleControls()}throw new Error(result?.error?.message||`Erro Google Sheets (${response.status}).`)}
+    return result;
+  }
+  function rangePath(range,query=''){return 'values/'+encodeURIComponent(range)+(query?'?'+query:'')}
+  async function verifySelectedSpreadsheet(){
+    const result=await sheetsApi(rangePath("'"+SHEET_NAME+"'!A1:E1",'valueRenderOption=UNFORMATTED_VALUE'));
+    const header=result.values?.[0]||[];
+    const expected=['key','type','date','updatedAt','payload'];
+    if(expected.some((v,i)=>String(header[i]||'')!==v))throw new Error('A aba “Registros” não tem o cabeçalho esperado. Escolha a planilha criada pelo setupStorage do projeto registro v.');
+    return true;
+  }
+  async function getCloudRecords(){
+    const result=await sheetsApi(rangePath("'"+SHEET_NAME+"'!A:E",'majorDimension=ROWS&valueRenderOption=UNFORMATTED_VALUE'));
+    const rows=result.values||[],records=[];
+    rows.slice(1).forEach(row=>{if(!row[0]||!row[4])return;try{const record=JSON.parse(String(row[4]));if(record&&(record.type==='daily'||record.type==='quick'))records.push(record)}catch(err){console.warn('Linha ignorada por payload inválido:',err)}});
+    return {records};
+  }
+  function sanitizeCloudRecord(raw){
+    const rec=JSON.parse(JSON.stringify(raw));delete rec.images;delete rec.id;
+    if(rec.type==='quick'){rec.text=String(rec.text||'');rec.cloudId=String(rec.cloudId||'');rec.createdAt=Number(rec.createdAt)||Date.now();rec.updatedAt=Number(rec.updatedAt||rec.createdAt)||Date.now();if(!rec.cloudId)throw new Error('Registro rápido sem identificador.');}
+    else{rec.date=String(rec.date||'');if(!/^\d{4}-\d{2}-\d{2}$/.test(rec.date))throw new Error('Data diária inválida.');rec.note=String(rec.note||'');rec.answers=rec.answers&&typeof rec.answers==='object'?rec.answers:{};rec.createdAt=Number(rec.createdAt)||Date.now();rec.updatedAt=Number(rec.updatedAt||rec.createdAt)||Date.now();}
+    return rec;
+  }
+  function cloudRecordKey(record){if(record.type==='daily'&&record.date)return 'daily:'+record.date;if(record.type==='quick'&&record.cloudId)return 'quick:'+record.cloudId;return ''}
+  async function saveCloudRecords(incoming){
+    if(!Array.isArray(incoming))throw new Error('Formato de registros inválido.');
+    let updated=0,inserted=0,ignored=0;
+    for(let offset=0;offset<incoming.length;offset+=500){
+      const batch=incoming.slice(offset,offset+500);
+      const result=await sheetsApi(rangePath("'"+SHEET_NAME+"'!A:E",'majorDimension=ROWS&valueRenderOption=UNFORMATTED_VALUE'));
+      const rows=result.values||[],rowByKey=new Map();
+      rows.slice(1).forEach((row,index)=>{if(row[0])rowByKey.set(String(row[0]),{rowNumber:index+2,row})});
+      const updates=new Map(),pending=new Map(),appendRows=[];
+      batch.forEach(raw=>{
+        if(!raw||(raw.type!=='daily'&&raw.type!=='quick')){ignored++;return}
+        let rec;try{rec=sanitizeCloudRecord(raw)}catch(err){ignored++;return}
+        const key=cloudRecordKey(rec);if(!key){ignored++;return}
+        const candidate=[key,rec.type,rec.date||'',Number(rec.updatedAt||rec.createdAt||Date.now()),JSON.stringify(rec)];
+        if(rowByKey.has(key)){
+          const found=rowByKey.get(key);let old=null;try{old=JSON.parse(String(found.row[4]))}catch(_){ }
+          const oldTime=Number(old&&(old.updatedAt||old.createdAt)||found.row[3]||0),newTime=Number(rec.updatedAt||rec.createdAt||Date.now());
+          if(!old||newTime>=oldTime){updates.set(found.rowNumber,candidate);updated++}else ignored++;
+        }else if(pending.has(key)){
+          const index=pending.get(key);let old=null;try{old=JSON.parse(String(appendRows[index][4]))}catch(_){ }
+          const oldTime=Number(old&&(old.updatedAt||old.createdAt)||appendRows[index][3]||0),newTime=Number(rec.updatedAt||rec.createdAt||Date.now());
+          if(!old||newTime>=oldTime){appendRows[index]=candidate;updated++}else ignored++;
+        }else{pending.set(key,appendRows.length);appendRows.push(candidate);inserted++}
+      });
+      if(updates.size){
+        const data=[...updates.entries()].map(([rowNumber,values])=>({range:"'"+SHEET_NAME+"'!A"+rowNumber+':E'+rowNumber,values:[values]}));
+        await sheetsApi('values:batchUpdate',{method:'POST',body:JSON.stringify({valueInputOption:'RAW',data})});
+      }
+      if(appendRows.length){
+        await sheetsApi('values/'+encodeURIComponent("'"+SHEET_NAME+"'!A:E")+':append?valueInputOption=RAW&insertDataOption=INSERT_ROWS',{method:'POST',body:JSON.stringify({majorDimension:'ROWS',values:appendRows})});
+      }
+    }
+    return {saved:updated+inserted,updated,inserted,ignored};
+  }
+  async function setQuickCloudId(rec){if(rec.cloudId)return rec;const updated={...rec,cloudId:makeCloudId()};await reqPromise(store(STORE,'readwrite').put(updated));return updated}
+  function toCloudRecord(rec,type){
+    if(type==='daily')return {type:'daily',date:rec.date,answers:rec.answers||{},note:rec.note||'',createdAt:Number(rec.createdAt)||Date.now(),updatedAt:Number(rec.updatedAt)||Number(rec.createdAt)||Date.now()};
+    return {type:'quick',cloudId:rec.cloudId,text:String(rec.text||''),answers:rec.answers||null,createdAt:Number(rec.createdAt)||Date.now(),updatedAt:Number(rec.updatedAt||rec.createdAt)||Date.now()};
+  }
+  async function localCloudRecords(){
+    const quick=await allQuick(),weekly=await allWeekly(),out=[];
+    for(const rec0 of quick){const rec=await setQuickCloudId(rec0);out.push(toCloudRecord(rec,'quick'))}
+    for(const rec of weekly)out.push(toCloudRecord(rec,'daily'));
+    return out;
+  }
+  async function mergeCloudRecords(records){
+    let merged=0;
+    for(const remote of (records||[])){
+      if(remote.type==='daily'&&remote.date){
+        const local=await getDaily(remote.date);const remoteTime=Number(remote.updatedAt||remote.createdAt||0),localTime=Number(local?.updatedAt||local?.createdAt||0);
+        if(!local||remoteTime>localTime){await saveDaily({...remote,images:local?.images||[],createdAt:Number(remote.createdAt)||Date.now(),updatedAt:remoteTime||Date.now()});merged++}
+      } else if(remote.type==='quick'&&remote.cloudId){
+        const all=await allQuick();const local=all.find(r=>r.cloudId===remote.cloudId);const remoteTime=Number(remote.updatedAt||remote.createdAt||0),localTime=Number(local?.updatedAt||local?.createdAt||0);
+        if(!local){await saveQuick({...remote,images:[],createdAt:Number(remote.createdAt)||Date.now(),updatedAt:remoteTime||Date.now()});merged++}
+        else if(remoteTime>localTime){await reqPromise(store(STORE,'readwrite').put({...local,...remote,images:local.images||[]}));merged++}
+      }
+    }
+    return merged;
+  }
+  async function pullCloudToLocal(quiet=false){
+    if(!cloudConfigured()){if(!quiet)notify('Conecte sua conta Google e escolha a planilha.');return false}
+    try{updateCloudStatus('Baixando registros da nuvem…');const result=await getCloudRecords();const count=await mergeCloudRecords(result.records||[]);await refreshWeek();await renderHistory();await generateReport();updateCloudStatus(`Dados recebidos da nuvem. ${count} registro(s) novo(s) ou atualizado(s) neste aparelho.`);if(!quiet)notify(`Sincronização concluída: ${count} registro(s) atualizados.`);return true}
+    catch(err){console.error(err);updateCloudStatus(`Não foi possível baixar os dados: ${err.message}`,true);if(!quiet)notify('Falha ao baixar da nuvem. Confira a autorização e a planilha.');return false}
+  }
+  async function syncAllLocalAndCloud(quiet=false){
+    if(!cloudConfigured()){if(!quiet)notify('Conecte sua conta Google e escolha a planilha antes de sincronizar.');return false}
+    try{updateCloudStatus('Enviando registros locais…');const records=await localCloudRecords();const result=await saveCloudRecords(records);const remote=await getCloudRecords();const merged=await mergeCloudRecords(remote.records||[]);await refreshWeek();await renderHistory();await generateReport();const saved=result&&Number(result.saved||0);updateCloudStatus(`Sincronização concluída. ${saved} registro(s) enviados/processados; ${merged} registro(s) recebidos/atualizados.`);if(!quiet)notify('Dados sincronizados com a nuvem.');return true}
+    catch(err){console.error(err);updateCloudStatus(`Falha na sincronização: ${err.message}`,true);if(!quiet)notify('Não consegui sincronizar. Os registros locais foram mantidos.');return false}
+  }
+  async function sendDailyToCloud(rec){if(!cloudConfigured())return false;const ok=await syncAllLocalAndCloud(true);if(ok)updateCloudStatus(`Controle de ${rec.date} sincronizado com a nuvem.`);return ok}
+  loadGoogleConfigFields();updateGoogleControls();
+  $('saveGoogleConfigBtn').addEventListener('click',()=>{try{saveGoogleConfig();}catch(err){notify(err.message)}});
+  $('connectGoogleBtn').addEventListener('click',async()=>{
+    try{const config=saveGoogleConfig(false);updateCloudStatus('Abrindo autorização segura do Google…');const response=await requestGoogleAccess(config);updateGoogleControls();
+      if(selectedSpreadsheetId){await verifySelectedSpreadsheet();updateCloudStatus('Conta conectada. Sincronizando a planilha selecionada…');const pulled=await pullCloudToLocal(true);const synced=await syncAllLocalAndCloud(true);if(!pulled||!synced)throw new Error('A conta conectou, mas não consegui concluir a sincronização. Confira o status.');}
+      else{updateCloudStatus('Conta conectada. Agora escolha a planilha “Registro de Verdade - Dados Privados”.');openSpreadsheetPicker();}
+    }catch(err){console.error(err);updateCloudStatus('Não foi possível conectar: '+err.message,true);notify('Falha na conexão Google. Confira os dados da configuração.');}
+  });
+  $('chooseSpreadsheetBtn').addEventListener('click',openSpreadsheetPicker);
+  $('syncAllBtn').addEventListener('click',()=>syncAllLocalAndCloud(false));
+  $('loadCloudBtn').addEventListener('click',()=>pullCloudToLocal(false));
+  $('disconnectGoogleBtn').addEventListener('click',()=>{const token=googleAccessToken;googleAccessToken='';googleAccessTokenExpiresAt=0;try{if(token&&google.accounts?.oauth2?.revoke)google.accounts.oauth2.revoke(token,()=>{});}catch(_){ }updateGoogleControls();updateCloudStatus('Conta desconectada neste aparelho. A configuração e a planilha selecionada foram mantidas.');});
+  async function deleteQuick(id){return reqPromise(store(STORE,'readwrite').delete(id))}
+  async function deleteDaily(date){return reqPromise(store(WEEKLY,'readwrite').delete(date))}
+  async function updateDaily(obj){return reqPromise(store(WEEKLY,'readwrite').put(obj))}
+  function clearURLs(arr){arr.forEach(URL.revokeObjectURL);arr.length=0}
+  function filePreviews(files,host,urlArray){clearURLs(urlArray);host.innerHTML='';for(const f of files){const u=URL.createObjectURL(f);urlArray.push(u);const im=document.createElement('img');im.src=u;im.alt=f.name;im.title=f.name;host.appendChild(im)}}
+  function addFiles(input,which){const files=Array.from(input.files||[]).filter(f=>f.type.startsWith('image/'));if(which==='quick'){quickFiles=files;filePreviews(files,$('quickPreview'),quickUrls)}else{dailyFiles=files;filePreviews(files,$('dailyPreview'),dailyUrls)}}
+  $('quickPhotos').addEventListener('change',e=>addFiles(e.target,'quick'));
+  $('dailyPhotos').addEventListener('change',e=>addFiles(e.target,'daily'));
+
+  function switchTab(name){document.querySelectorAll('.tabpanel').forEach(t=>t.classList.toggle('active',t.id===`tab-${name}`));document.querySelectorAll('[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));if(name==='weekly')refreshWeek().catch(err=>notify('Não consegui carregar a semana.'));if(name==='history')renderHistory().catch(err=>notify('Não consegui carregar o histórico.'))}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+
+  $('quickForm').addEventListener('submit',async e=>{e.preventDefault();const text=$('quickText').value.trim();if(!text&&!quickFiles.length){notify('Escreva alguma coisa ou selecione uma imagem.');return}const btn=e.submitter||$('quickForm').querySelector('button');btn.disabled=true;try{const images=quickFiles.map(f=>({name:f.name,type:f.type||'image/jpeg',blob:f}));await saveQuick({type:'quick',cloudId:makeCloudId(),text,images,createdAt:Date.now(),updatedAt:Date.now()});const quickCloudOK=cloudConfigured()?await syncAllLocalAndCloud(true):false;$('quickText').value='';$('quickPhotos').value='';quickFiles=[];clearURLs(quickUrls);$('quickPreview').innerHTML='';notify(cloudConfigured()?(quickCloudOK?'Registro salvo e sincronizado.':'Registro salvo neste aparelho; sincronização pendente.'):'Registro salvo neste aparelho.');await renderHistory()}catch(err){console.error(err);notify('Não consegui salvar este registro.')}finally{btn.disabled=false}});
+
+  const weekNames=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  function currentSelectedIndex(dates){let i=dates.indexOf(selectedDate);if(i<0){const today=localISO(new Date());i=dates.indexOf(today);if(i<0)i=0;selectedDate=dates[i]}return i}
+  async function refreshWeek(){const dates=selectedWeekDates();currentSelectedIndex(dates);const start=dateFromISO(dates[0]),end=dateFromISO(dates[6]);$('weekLabel').textContent=`${displayDate(dates[0])} a ${displayDate(dates[6])}`;
+    const entries=await Promise.all(dates.map(d=>getDaily(d)));const filled=entries.filter(Boolean).length;$('weekProgress').style.width=`${filled/7*100}%`;$('weekProgressText').textContent=`${filled} de 7 dias preenchidos`;
+    $('weekDays').innerHTML=dates.map((date,i)=>{const entry=entries[i];const active=date===selectedDate;return `<button class="daybtn ${active?'selected':''} ${entry?'done':'missing'}" type="button" data-date="${date}">${weekNames[i]}<span>${date.slice(8,10)}/${date.slice(5,7)} ${entry?'✓':'·'}</span></button>`}).join('');
+    $('weekDays').querySelectorAll('[data-date]').forEach(b=>b.addEventListener('click',()=>{selectedDate=b.dataset.date;loadDailyForm().catch(()=>notify('Falha ao carregar o dia.'));refreshWeek().catch(()=>{})}));
+    await loadDailyForm();await generateReport();
+  }
+  function getAnswersFromForm(){const a={};for(const [key] of questions){const el=document.querySelector(`input[name="q_${key}"]:checked`);if(!el)return null;a[key]=el.value}return a}
+  function setAnswers(a){for(const [key] of questions){document.querySelectorAll(`input[name="q_${key}"]`).forEach(el=>{el.checked=!!a&&el.value===a[key]})}}
+  async function loadDailyForm(){if(!selectedDate)selectedDate=selectedWeekDates()[0];const rec=await getDaily(selectedDate);$('selectedDayTitle').textContent=displayLong(selectedDate);$('selectedDayStatus').textContent=rec?'Salvo':'Ainda não preenchido';$('dailyNote').value=rec?.note||'';setAnswers(rec?.answers||null);$('dailyPhotos').value='';dailyFiles=[];clearURLs(dailyUrls);$('dailyPreview').innerHTML='';if(rec?.images?.length){for(const im of rec.images){if(im.blob){const url=URL.createObjectURL(im.blob);dailyUrls.push(url);const img=document.createElement('img');img.src=url;img.alt=im.name||'Imagem salva';$('dailyPreview').appendChild(img)}}}$('saveDailyBtn').textContent=rec?'Atualizar este dia':'Salvar este dia'}
+  $('dailyForm').addEventListener('submit',async e=>{e.preventDefault();const answers=getAnswersFromForm();if(!answers){notify('Marque Sim ou Não nas nove perguntas.');return}const previous=await getDaily(selectedDate);const freshImages=dailyFiles.map(f=>({name:f.name,type:f.type||'image/jpeg',blob:f}));const images=dailyFiles.length?freshImages:(previous?.images||[]);const record={date:selectedDate,answers,note:$('dailyNote').value.trim(),images,createdAt:previous?.createdAt||Date.now(),updatedAt:Date.now()};const btn=$('saveDailyBtn');btn.disabled=true;try{await saveDaily(record);const cloudSent=await sendDailyToCloud(record);notify(cloudSent?'Dia salvo e sincronizado com a nuvem.':(cloudConfigured()?'Dia salvo neste aparelho; sincronização pendente.':'Dia salvo neste aparelho. Conecte sua conta Google na aba de sincronização para usar outros dispositivos.'));await refreshWeek();await renderHistory()}catch(err){console.error(err);notify('Não consegui salvar esse dia.')}finally{btn.disabled=false}});
+  $('prevWeek').addEventListener('click',()=>{weekOffset--;selectedDate=selectedWeekDates()[0];refreshWeek()});$('nextWeek').addEventListener('click',()=>{weekOffset++;selectedDate=selectedWeekDates()[0];refreshWeek()});$('thisWeek').addEventListener('click',()=>{weekOffset=0;const ds=selectedWeekDates();selectedDate=ds.includes(localISO(new Date()))?localISO(new Date()):ds[0];refreshWeek()});
+
+  function reportText(dates,entries){const filled=entries.filter(Boolean),fmt=dates=>`${displayDate(dates[0])}–${displayDate(dates[6])}`;const lines=[];lines.push('REGISTRO DE VERDADE — RELATÓRIO SEMANAL');lines.push(`Período: ${fmt(dates)}`);lines.push(`Dias preenchidos: ${filled.length}/7`);lines.push('');
+    const keys=['lied','hid','falseVersion','brokenCommitment','paused','needCorrection','corrected','proactive','soughtSupport'];const shortLabels={lied:'Mentiu',hid:'Escondeu/omitiu algo importante',falseVersion:'Deu desculpa falsa/mudou versão',brokenCommitment:'Descumpriu limite/compromisso',paused:'Fez pausa antes de agir',needCorrection:'Precisava corrigir algo',corrected:'Já corrigiu algo pendente',proactive:'Corrigiu antes de ser descoberto',soughtSupport:'Procurou apoio'};
+    lines.push('RESUMO');lines.push(`- Dias com registro: ${filled.length} de 7`);lines.push(`- Dias em que marcou “Sim” para mentira: ${filled.filter(r=>r.answers?.lied==='sim').length}`);lines.push(`- Dias em que marcou “Sim” para esconder/omitir: ${filled.filter(r=>r.answers?.hid==='sim').length}`);lines.push(`- Dias em que marcou necessidade de correção ainda não corrigida: ${filled.filter(r=>r.answers?.needCorrection==='sim'&&r.answers?.corrected!=='sim').length}`);lines.push(`- Dias em que marcou correção espontânea: ${filled.filter(r=>r.answers?.proactive==='sim').length}`);lines.push(`- Dias em que procurou apoio: ${filled.filter(r=>r.answers?.soughtSupport==='sim').length}`);lines.push('');lines.push('DETALHAMENTO POR DIA');
+    dates.forEach((d,i)=>{const r=entries[i];lines.push('');lines.push(`${displayLong(d)}${r?'':' — SEM REGISTRO'}`);if(!r)return;for(const k of keys){lines.push(`- ${shortLabels[k]}: ${r.answers?.[k]||'não respondido'}`)}if(r.note)lines.push(`- Observações: ${r.note}`);if(r.images?.length)lines.push(`- Imagens anexadas: ${r.images.length}`)});
+    lines.push('');lines.push('Este relatório resume as respostas registradas no programa; não é uma avaliação automática nem substitui conversa ou acompanhamento profissional.');return lines.join('\n')}
+  async function generateReport(){const dates=selectedWeekDates();const entries=await Promise.all(dates.map(d=>getDaily(d)));const text=reportText(dates,entries);$('reportPreview').textContent=text;return text}
+  $('downloadReport').addEventListener('click',async()=>{const text=await generateReport();const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`relatorio-semanal-${selectedWeekDates()[0]}-${selectedWeekDates()[6]}.txt`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Relatório semanal baixado.')});
+  const emailField=$('reportEmail');emailField.value=prefGet('registro_verdade_email');emailField.addEventListener('change',()=>prefSet('registro_verdade_email',emailField.value.trim()));
+  $('emailReport').addEventListener('click',async()=>{const email=emailField.value.trim();if(!email||!email.includes('@')){notify('Informe seu e-mail para preparar o envio.');emailField.focus();return}prefSet('registro_verdade_email',email);const text=await generateReport();const dates=selectedWeekDates();const subject=`Relatório semanal de honestidade — ${displayDate(dates[0])} a ${displayDate(dates[6])}`;const maxBody=text.length>9500?text.slice(0,9500)+'\n\n[Relatório abreviado pelo limite do link de e-mail. Baixe o TXT para a versão completa.]':text;const url=`mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(maxBody)}`;window.location.href=url;notify('Confira o rascunho aberto no seu e-mail e clique em Enviar.')});
+
+  async function historyData(){const q=await allQuick(),w=await allWeekly();const items=[...q.map(r=>({...r,_kind:'quick',_sort:r.createdAt||0})),...w.map(r=>({...r,_kind:'daily',_sort:r.updatedAt||r.createdAt||0}))];return items.sort((a,b)=>b._sort-a._sort)}
+  async function renderHistory(){const items=await historyData();const h=$('history');if(!items.length){h.innerHTML='<p class="empty">Nenhum registro salvo ainda.</p>';return}h.innerHTML='';for(const r of items){const el=document.createElement('article');el.className='entry';const date=r._kind==='daily'?`${displayLong(r.date)} — prestação de contas` : new Date(r.createdAt).toLocaleString('pt-BR',{dateStyle:'medium',timeStyle:'short'});let inner=`<div class="entry-date">${esc(date)}</div>`;if(r._kind==='daily'){inner+='<strong>Controle diário</strong><div style="display:grid;gap:5px;margin-top:8px">'+questions.map(([k,label])=>`<div><b>${esc(r.answers?.[k]||'—')}:</b> ${esc(label)}</div>`).join('')+'</div>';if(r.note)inner+=`<div style="margin-top:10px"><b>Observações:</b><div class="entry-text">${esc(r.note)}</div></div>`}else{if(r.answers){inner+='<strong>Prestação de contas antiga</strong><div style="display:grid;gap:5px;margin-top:8px">'+questions.map(([k,label])=>`<div><b>${esc(r.answers?.[k]||'—')}:</b> ${esc(label)}</div>`).join('')+'</div>'}if(r.text)inner+=`<div class="entry-text">${esc(r.text)}</div>`}inner+='<div class="entry-images"></div><div class="actions"><button class="secondary delete-entry" type="button">Excluir registro</button></div>';el.innerHTML=inner;const imagesEl=el.querySelector('.entry-images');for(const im of (r.images||[])){if(!im.blob)continue;const u=URL.createObjectURL(im.blob);const img=document.createElement('img');img.src=u;img.alt=im.name||'Imagem anexada';img.addEventListener('click',()=>window.open(u,'_blank','noopener'));imagesEl.appendChild(img)}el.querySelector('.delete-entry').addEventListener('click',async()=>{if(!confirm('Excluir este registro apenas do histórico deste aparelho? A cópia da planilha não será apagada e poderá reaparecer na próxima sincronização.'))return;try{if(r._kind==='daily')await deleteDaily(r.date);else await deleteQuick(r.id);await renderHistory();await refreshWeek();notify('Registro excluído deste aparelho.')}catch(err){notify('Não consegui excluir o registro.')}});h.appendChild(el)}}
+
+  function blobToDataURL(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(blob)})}
+  function dataURLToBlob(url){const [head,data]=url.split(',');const mime=(head.match(/data:(.*?);base64/)||[])[1]||'application/octet-stream';const binary=atob(data),bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);return new Blob([bytes],{type:mime})}
+  async function migrateV6LocalStorage(){
+    // This migration only works if the browser exposes the same file origin used by v6.
+    const raw=prefGet('registro_verdade_v6_data');
+    if(!raw)return 0;
+    let parsed;try{parsed=JSON.parse(raw)}catch(err){console.warn('Dados v6 não puderam ser interpretados.',err);return 0}
+    if(!parsed||typeof parsed!=='object')return 0;
+    const alreadyQuick=await allQuick(),alreadyWeekly=await allWeekly();
+    let migrated=0;
+    const toImages=imgs=>(imgs||[]).filter(im=>im&&im.dataURL).map(im=>({name:im.name||'imagem',type:im.type||'application/octet-stream',blob:dataURLToBlob(im.dataURL)}));
+    if(Array.isArray(parsed.quick)){
+      for(const r of parsed.quick){
+        const rec={type:'quick',text:String(r.text||''),images:toImages(r.images),createdAt:Number(r.createdAt)||Date.now()};
+        await saveQuick(rec);migrated++;
+      }
+    }
+    if(parsed.daily&&typeof parsed.daily==='object'){
+      for(const r of Object.values(parsed.daily)){
+        if(!r||!r.date)continue;
+        const current=await getDaily(r.date);
+        if(current && Number(current.updatedAt||current.createdAt||0)>=Number(r.updatedAt||r.createdAt||0))continue;
+        await saveDaily({date:r.date,answers:r.answers||{},note:String(r.note||''),images:toImages(r.images),createdAt:Number(r.createdAt)||Date.now(),updatedAt:Number(r.updatedAt)||Date.now()});
+        migrated++;
+      }
+    }
+    if(migrated){prefRemove('registro_verdade_v6_data');console.info(`Migração v6: ${migrated} registro(s).`)}
+    return migrated;
+  }
+  async function portableEntry(r){const images=[];for(const im of (r.images||[])){if(im.blob)images.push({name:im.name,type:im.type,dataURL:await blobToDataURL(im.blob)})}const copy={...r,images};delete copy.id;return copy}
+  $('exportBtn').addEventListener('click',async()=>{try{const records=await allQuick(),weekly=await allWeekly();const pRecords=[];for(const r of records){const p=await portableEntry(r);p.id=r.id;pRecords.push(p)}const pWeekly=[];for(const r of weekly)pWeekly.push(await portableEntry(r));const payload={app:'Registro de Verdade',version:2,exportedAt:new Date().toISOString(),records:pRecords,weekly:pWeekly,email:emailField.value.trim()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`backup-registro-de-verdade-${localISO(new Date())}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);notify('Backup exportado com registros e controles semanais.')}catch(err){console.error(err);notify('Falha ao exportar backup.')}});
+  $('importBtn').addEventListener('click',()=>$('backupFile').click());
+  $('backupFile').addEventListener('change',async()=>{const file=$('backupFile').files?.[0];if(!file)return;try{const parsed=JSON.parse(await file.text());if(!Array.isArray(parsed.records))throw new Error('Backup sem lista de registros');const oldQ=await allQuick(),oldW=await allWeekly();if((oldQ.length||oldW.length)&&!confirm('Importar vai ADICIONAR os registros do backup aos dados existentes; não vai apagar os atuais. Continuar?'))return;for(const r of parsed.records){const images=[];for(const im of r.images||[])if(im.dataURL)images.push({name:im.name||'imagem',type:im.type||'application/octet-stream',blob:dataURLToBlob(im.dataURL)});const rec={type:r.type||'quick',cloudId:String(r.cloudId||''),text:String(r.text||''),answers:r.answers||null,images,createdAt:Number(r.createdAt)||Date.now(),updatedAt:Number(r.updatedAt||r.createdAt)||Date.now()};await saveQuick(rec)}for(const r of (parsed.weekly||[])){if(!r.date)continue;const images=[];for(const im of r.images||[])if(im.dataURL)images.push({name:im.name||'imagem',type:im.type||'application/octet-stream',blob:dataURLToBlob(im.dataURL)});await saveDaily({date:r.date,answers:r.answers||{},note:String(r.note||''),images,createdAt:Number(r.createdAt)||Date.now(),updatedAt:Number(r.updatedAt)||Date.now()})}if(parsed.email){emailField.value=parsed.email;prefSet('registro_verdade_email',parsed.email)}await renderHistory();await refreshWeek();if(cloudConfigured())await syncAllLocalAndCloud(true);notify('Backup importado. Confira a sincronização na aba correspondente.')}catch(err){console.error(err);notify('Não foi possível importar. Confira se escolheu um backup válido.')}finally{$('backupFile').value=''}});
+
+  window.addEventListener('unhandledrejection',e=>{console.error('Erro assíncrono:',e.reason);notify('Uma operação falhou. Abra o histórico para conferir se o registro foi salvo.');});
+  (async()=>{try{db=await openDB();const migrated=await migrateV6LocalStorage();const today=localISO(new Date());weekOffset=0;selectedDate=today;const ds=selectedWeekDates();if(!ds.includes(selectedDate))selectedDate=ds[0];await refreshWeek();await renderHistory();await generateReport();if(migrated)notify(`Controle carregado. ${migrated} registro(s) recuperado(s) da v6.`)}catch(err){console.error('Falha na inicialização do Registro de Verdade:',err);notify('Não consegui abrir o armazenamento local. Use o backup em “Histórico e backup” para recuperar seus registros.');const hist=$('history');if(hist)hist.innerHTML='<p class="empty">Não foi possível abrir o armazenamento deste aparelho. Recarregue o aplicativo ou importe um backup.</p>'}})();
+  if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./service-worker.js').catch(err=>console.warn('Service worker indisponível:',err));
+})();
+</script>
+</body>
+</html>
