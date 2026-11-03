@@ -4,7 +4,7 @@ Esta versão transforma a interface recebida em um Progressive Web App (PWA), in
 
 ## O que foi preservado
 
-- Controle semanal com nove perguntas principais, observações e uma pergunta opcional sobre perceber o impulso de esconder, distorcer ou omitir.
+- Controle semanal com nove perguntas principais, observações, pergunta sobre perceber o impulso de esconder/distorcer/omitir e análise opcional de causa raiz por dia.
 - Registros rápidos com análise guiada: situação, verdade completa, tentativa de fuga, emoções, pensamento automático, o que tentava proteger, ganho imediato, custo posterior, hipótese de causa, cinco porquês e reparação.
 - Relatório semanal com padrões de fuga, emoções e fatores que a pessoa tentou proteger.
 - Histórico, exclusão local e backup JSON com imagens.
