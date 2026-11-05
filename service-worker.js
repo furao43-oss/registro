@@ -1,4 +1,6 @@
-const CACHE_NAME = 'registro-verdade-pwa-v3-controle-semanal';
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+
+const CACHE_NAME = 'registro-verdade-pwa-v4-onesignal';
 const APP_SHELL = [
   './',
   './index.html',
