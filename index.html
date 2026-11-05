@@ -10,6 +10,27 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icons/icon-180.png">
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.__registroVerdadeOneSignalReady = new Promise((resolve, reject) => {
+    window.OneSignalDeferred.push(async function (OneSignal) {
+      try {
+        await OneSignal.init({
+          appId: "5b44a09d-8281-4651-8586-8c80475b4b21",
+          safari_web_id: "web.onesignal.auto.4b51c712-23a7-447d-a673-6f24b07d407b",
+          serviceWorkerPath: "/registro/service-worker.js",
+          serviceWorkerParam: { scope: "/registro/" },
+          notifyButton: { enable: false }
+        });
+        await OneSignal.login("registro-verdade-vitor-7c1a4d8f");
+        resolve(OneSignal);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+</script>
 <title>Registro de Verdade</title>
 <style>
 :root{--bg:#f4f5f7;--card:#fff;--ink:#202124;--muted:#686d75;--line:#e2e5e9;--dark:#202124;--soft:#eff1f4;--green:#176b43;--amber:#8d5500;--blue:#244a75}
@@ -260,6 +281,16 @@ label{display:block;font-weight:650;margin:14px 0 7px}textarea,input[type=text],
 
   <section id="tab-automation" class="tabpanel">
     <div class="card">
+      <h2>Notificações neste aparelho</h2>
+      <p class="muted">Ative as notificações para receber a checagem do meio-dia, o aviso de registros atrasados e a revisão das 22h.</p>
+      <div class="actions">
+        <button id="enablePushBtn" class="primary" type="button">Ativar notificações</button>
+        <button id="refreshPushStatusBtn" class="secondary" type="button">Verificar status</button>
+      </div>
+      <p id="pushStatus" class="notice">Verificando conexão com o serviço de notificações…</p>
+      <p class="small">A autorização é solicitada somente quando você toca em “Ativar notificações”. Cada aparelho precisa ser ativado separadamente.</p>
+    </div>
+    <div class="card">
       <h2>Sincronização segura com Google Sheets</h2>
       <p class="muted">Conecte a conta Google que tem acesso à planilha criada pelo Registro de Verdade. Depois, selecione a planilha “Registro de Verdade - Dados Privados”. O aplicativo usa a autorização do Google e o acesso fica limitado ao arquivo escolhido.</p>
       <label for="googleClientId">OAuth Client ID</label>
@@ -327,6 +358,56 @@ label{display:block;font-weight:650;margin:14px 0 7px}textarea,input[type=text],
   function prefRemove(key){try{window.localStorage.removeItem(key);}catch(err){console.warn('Não foi possível remover a preferência:',key,err);}}
 
   function notify(msg){toast.textContent=msg;toast.style.display='block';clearTimeout(notify.timer);notify.timer=setTimeout(()=>toast.style.display='none',3200)}
+
+  async function refreshPushStatus(){
+    const status=$('pushStatus');
+    const button=$('enablePushBtn');
+    try{
+      const OneSignal=await window.__registroVerdadeOneSignalReady;
+      if(!OneSignal.Notifications.isPushSupported()){
+        status.textContent='Este navegador/aparelho não oferece suporte a notificações push.';
+        button.disabled=true;
+        return;
+      }
+      const permission=OneSignal.Notifications.permissionNative;
+      if(permission==='denied'){
+        status.textContent='As notificações estão bloqueadas nas permissões do navegador. Altere a permissão do site nas configurações do navegador/aparelho.';
+      }else if(permission==='granted'&&OneSignal.User.PushSubscription.optedIn){
+        status.textContent='Notificações ativadas neste aparelho. Você poderá receber os lembretes programados.';
+        button.textContent='Notificações ativadas';
+        button.disabled=true;
+      }else if(permission==='granted'){
+        status.textContent='O navegador autorizou notificações, mas a inscrição ainda não foi concluída. Toque em “Ativar notificações”.';
+      }else{
+        status.textContent='Notificações ainda não ativadas neste aparelho.';
+      }
+    }catch(error){
+      console.warn('OneSignal ainda não ficou disponível:',error);
+      status.textContent='Não consegui conectar ao serviço de notificações. Confira sua conexão e recarregue o aplicativo.';
+    }
+  }
+
+  $('enablePushBtn').addEventListener('click',async()=>{
+    const button=$('enablePushBtn');
+    const status=$('pushStatus');
+    button.disabled=true;
+    status.textContent='Solicitando autorização de notificações…';
+    try{
+      const OneSignal=await window.__registroVerdadeOneSignalReady;
+      if(!OneSignal.Notifications.isPushSupported())throw new Error('Este navegador/aparelho não oferece suporte a notificações push.');
+      if(OneSignal.Notifications.permissionNative==='denied')throw new Error('A permissão já está bloqueada. Altere as permissões do site nas configurações do navegador/aparelho.');
+      await OneSignal.Notifications.requestPermission();
+      if(OneSignal.Notifications.permissionNative!=='granted')throw new Error('A autorização não foi concedida. Você pode tentar novamente nas permissões do navegador.');
+      await OneSignal.User.PushSubscription.optIn();
+      await refreshPushStatus();
+      if(!OneSignal.User.PushSubscription.optedIn)status.textContent='A permissão foi concedida, mas a inscrição ainda está sendo concluída. Toque em “Verificar status” em alguns instantes.';
+    }catch(error){
+      status.textContent=error?.message||'Não foi possível ativar as notificações.';
+      button.disabled=false;
+    }
+  });
+  $('refreshPushStatusBtn').addEventListener('click',()=>refreshPushStatus());
+  refreshPushStatus();
   function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
   function localISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
   function dateFromISO(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12,0,0,0)}
